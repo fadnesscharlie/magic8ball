@@ -33,7 +33,7 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 }));
 
 export default function ResultTable() {
-  let { data, counter } = React.useContext(DataContext);
+  let { frequencyData, counter } = React.useContext(DataContext);
 
   return (
     <TableContainer component={Paper}>
@@ -46,7 +46,7 @@ export default function ResultTable() {
           </TableRow>
         </TableHead>
         <TableBody>
-          {data.frequencyData.map((row) => (
+          {frequencyData.data.map((row) => (
             <StyledTableRow hover key={row.value}>
               <StyledTableCell component="th" scope="row">
                 {row.value}

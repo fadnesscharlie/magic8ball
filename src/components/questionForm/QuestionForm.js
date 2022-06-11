@@ -5,7 +5,7 @@ import {
   NativeSelect,
   Button,
 } from "@mui/material";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useState } from "react";
 import { questions } from "../db/database";
 import { answers } from "../db/database";
 
@@ -14,12 +14,12 @@ import "./QuestionForm.css";
 
 export default function QuestionForm() {
   let {
-    data,
-    setData,
     counter,
     setCounter,
     predictionData,
     setPredictionData,
+    frequencyData,
+    setFrequencyData,
   } = useContext(DataContext);
 
   let [question, setQuestion] = useState(questions[0]);
@@ -35,7 +35,7 @@ export default function QuestionForm() {
     setQuestion(e.target.value);
   }
 
-  console.log("predictionData length: ", predictionData);
+  // console.log("predictionData length: ", predictionData);
 
   /* Checks:
   if question is already inside
@@ -89,22 +89,25 @@ export default function QuestionForm() {
     // If nothing is in frequencyData
     if (!predictionData.data.length) {
       setPredictionData({
-        data: [...predictionData.data, questionPrediction]});
+        data: [...predictionData.data, questionPrediction],
+      });
     }
 
     predictionData.data &&
       predictionData.data.map((el) => {
         let result = ifIncludes(question, predictionData.data);
         if (result) {
-          setPredictionData({ data: [...predictionData.data, questionPrediction]});
+          setPredictionData({
+            data: [...predictionData.data, questionPrediction],
+          });
         }
 
         if (el.value === question) {
           // Runs twice, if answer is already in array
           // Had to modify score to divide by 2
-            setPredictionData((prevState) => ({
+          setPredictionData((prevState) => ({
             ...prevState,
-            totalScore: el.totalScore = el.totalScore + (score/2),
+            totalScore: (el.totalScore = el.totalScore + score / 2),
           }));
         }
       });
@@ -116,28 +119,27 @@ export default function QuestionForm() {
     // ##################################################################
 
     // If nothing is in frequencyData
-    if (!data.frequencyData.length) {
-      setData({
-        frequencyData: [...data.frequencyData, intitalData],
+    if (!frequencyData.data.length) {
+      setFrequencyData({
+        data: [...frequencyData.data, intitalData],
       });
     }
-
-    data.frequencyData &&
-      data.frequencyData.map((el) => {
-        let result = ifIncludes(answer, data.frequencyData);
-        result = false;
+    console.log('counter', counter);
+    frequencyData.data &&
+      frequencyData.data.map((el) => {
+        let result = ifIncludes(answer, frequencyData.data);
 
         // if new answer is not inside array, add it
         if (result) {
-          setData({
-            frequencyData: [...data.frequencyData, intitalData],
+          setFrequencyData({
+            data: [...frequencyData.data, intitalData],
           });
         }
 
         if (el.value === choosenAnswer) {
           // Runs twice, if answer is already in array
           // Had to modify frequency++ to add only 0.5
-          setData((prevState) => ({
+          setFrequencyData((prevState) => ({
             ...prevState,
             frequency: (el.frequency = el.frequency + 0.5),
           }));

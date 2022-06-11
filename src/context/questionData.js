@@ -4,9 +4,8 @@ import { answers } from "../components/db/database";
 export const DataContext = createContext({});
 
 function DataProvider(props) {
-  const [data, setData] = useState({
-    activeAnswer: "",
-    frequencyData: [],
+  const [frequencyData, setFrequencyData] = useState({
+    data: [],
   });
 
   const [counter, setCounter] = useState(0);
@@ -18,12 +17,11 @@ function DataProvider(props) {
   return (
     <DataContext.Provider
       value={{
-        data,
-        setData,
         counter,
         setCounter,
         predictionData,
         setPredictionData,
+        frequencyData, setFrequencyData
       }}
     >
       {props.children}
