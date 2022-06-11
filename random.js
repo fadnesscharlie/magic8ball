@@ -16,8 +16,6 @@ export default function QuestionForm() {
   let { data, setData, counter, setCounter, questionData, setQuestionData } =
     useContext(DataContext);
 
-  let [question, setQuestion] = useState("");
-
   let answerForm = questions.map((ans, idx) => (
     <option value={ans} key={idx}>
       {ans}
@@ -25,10 +23,18 @@ export default function QuestionForm() {
   ));
 
   function handleQuestion(e) {
-    setQuestion(e.target.value);
+    setData({ ...data, activeQuestion: e.target.value });
   }
 
-  console.log("questionData", questionData.data);
+  // setQuestionData({
+  //   data: [
+  //     {
+  //       question: data.activeQuestion,
+  //       score: 10,
+  //       count: "count + 1",
+  //     },
+  //   ],
+  // });
 
   /* Checks:
   if question is already inside
@@ -65,27 +71,6 @@ export default function QuestionForm() {
       frequency: 1,
     };
 
-    let questionPrediction = {
-      question: question ? question : questions[0],
-      score: questionData.data[0].score + score,
-      count: questionData.data[0].count + 1,
-    }
-    
-
-    questionData.data && questionData.data.map((el) => {
-      let result = ifIncludes(el.question, question, questionData.data)
-      console.log('result',result)
-
-      if(result) {
-        setQuestionData({
-          data: [
-            ...questionData.data,
-            questionPrediction,
-          ],
-        });
-      }
-    });
-
     // If nothing is in predictions
     if (!data.predictions.length) {
       setData({
@@ -103,17 +88,17 @@ export default function QuestionForm() {
     }
 
     // custom includes function
-    function ifIncludes(value1, value2, arr) {
+    function ifIncludes() {
       let result = true;
-      arr.map((el) => {
-        if (value1 === value2) return (result = false);
+      data.predictions.map((el) => {
+        if (el.value === choosenAnswer) return (result = false);
       });
       return result;
     }
 
     data.predictions &&
       data.predictions.map((el) => {
-        let result = ifIncludes(el.value, choosenAnswer, data.predictions);
+        let result = ifIncludes();
 
         // if new answer is not inside array, add it
         if (result) {

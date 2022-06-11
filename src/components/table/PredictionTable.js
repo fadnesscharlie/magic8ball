@@ -1,14 +1,15 @@
-import * as React from "react";
+import {useContext} from "react";
 import { styled } from "@mui/material/styles";
-import Table from "@mui/material/Table";
-import TableBody from "@mui/material/TableBody";
+import {
+  Table,
+  TableBody,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Paper,
+} from "@mui/material";
 import TableCell, { tableCellClasses } from "@mui/material/TableCell";
-import TableContainer from "@mui/material/TableContainer";
-import TableHead from "@mui/material/TableHead";
-import TableRow from "@mui/material/TableRow";
-import Paper from "@mui/material/Paper";
-import "./ResultTable.css";
-
+import "./Table.css";
 
 import { DataContext } from "../../context/questionData";
 
@@ -32,29 +33,25 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
   },
 }));
 
-export default function ResultTable() {
-  let { frequencyData, counter } = React.useContext(DataContext);
+export default function PredictionTable() {
+  let { predictionData } = useContext(DataContext);
 
   return (
     <TableContainer component={Paper}>
-      <Table sx={{ width: '50%' }} aria-label="customized table" className="table">
+      <Table  aria-label="customized table" className="table">
         <TableHead>
           <TableRow>
-            <StyledTableCell>Magic 8 ball Answers!</StyledTableCell>
-            <StyledTableCell align="right">Frequency</StyledTableCell>
-            <StyledTableCell align="right">Percentage</StyledTableCell>
+            <StyledTableCell>Magic 8 ball Questions!</StyledTableCell>
+            <StyledTableCell align="right">Prediction</StyledTableCell>
           </TableRow>
         </TableHead>
         <TableBody>
-          {frequencyData.data.map((row) => (
+          {predictionData.data.map((row) => (
             <StyledTableRow hover key={row.value}>
               <StyledTableCell component="th" scope="row">
                 {row.value}
               </StyledTableCell>
-              <StyledTableCell align="right">{row.frequency}</StyledTableCell>
-              <StyledTableCell align="right">
-                % {((row.frequency / counter) * 100).toFixed(2)}
-              </StyledTableCell>
+              <StyledTableCell align="right">{row.prediction}</StyledTableCell>
             </StyledTableRow>
           ))}
         </TableBody>

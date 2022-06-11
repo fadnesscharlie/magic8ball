@@ -9,19 +9,23 @@ function DataProvider(props) {
   });
 
   const [counter, setCounter] = useState(0);
+  const [score, setScore] = useState(0);
 
   const [predictionData, setPredictionData] = useState({
-    data: []
+    data: [],
   });
 
   return (
     <DataContext.Provider
       value={{
+        score,
+        setScore,
         counter,
         setCounter,
         predictionData,
         setPredictionData,
-        frequencyData, setFrequencyData
+        frequencyData,
+        setFrequencyData,
       }}
     >
       {props.children}
@@ -30,31 +34,3 @@ function DataProvider(props) {
 }
 
 export default DataProvider;
-
-/* 
-
-data: [
-  [
-    questions: [{
-      answer: '',
-      count: 0,
-    },
-    {
-      answer: '',
-      count: 0,
-    },
-  ],
-  questions: [{
-      answer: '',
-      count: 0,
-    },
-    {
-      answer: '',
-      count: 0,
-    },
-  ]
-  ]
-]
-
-
-*/

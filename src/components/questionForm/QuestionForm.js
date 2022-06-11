@@ -12,6 +12,19 @@ import { answers } from "../db/database";
 import { DataContext } from "../../context/questionData";
 import "./QuestionForm.css";
 
+// Prediction
+// import prediction from './Prediction/prediction';
+
+// custom includes function
+function ifIncludes(value, arr) {
+  let result = true;
+  arr.map((el) => {
+    if (el.value === value) return  result = false;
+  });
+  // console.log('Result', result);
+  return result;
+}
+
 export default function QuestionForm() {
   let {
     counter,
@@ -20,10 +33,14 @@ export default function QuestionForm() {
     setPredictionData,
     frequencyData,
     setFrequencyData,
+    score,
+    setScore,
   } = useContext(DataContext);
 
   let [question, setQuestion] = useState(questions[0]);
   let [answer, setAnswer] = useState("");
+  let [finalPrediction, setFinalPrediction] = useState("");
+  let [lucky, setLucky] = useState(false);
 
   let answerForm = questions.map((ans, idx) => (
     <option value={ans} key={idx}>
@@ -35,54 +52,31 @@ export default function QuestionForm() {
     setQuestion(e.target.value);
   }
 
-  // console.log("predictionData length: ", predictionData);
-
-  /* Checks:
-  if question is already inside
-  if answer is already inside that question
-    Once you add score, and increment counter
-
-  Data:
-    Add all the points up per question
-    divide the points by the amount of that many
-      return back a number a find the nearest answer
-
-    Ex. score:
-      25, 50, 100, 10, 0 = 185
-      score / count  = result
-      185   /   5    = 37
-      Find nearest to 37, which is 25
-      Return score value that is 25
-*/
-
-  // custom includes function
-  function ifIncludes(value, arr) {
-    let result = true;
-    arr.map((el) => {
-      if (el.value === value) return (result = false);
-    });
-    // console.log('Result', result);
-    return result;
-  }
-
   function pickAnswer() {
+    // Picks a random Number for us
     let random = Math.floor(Math.random() * answers.length);
 
     let choosenAnswer = answers[random].value;
-    let score = answers[random].score;
-
     setAnswer(choosenAnswer);
+
+    let scoreData = answers[random].score;
+    setScore(scoreData);
+
     setCounter(counter + 1);
 
-    let intitalData = {
-      value: choosenAnswer,
-      score,
-      frequency: 1,
-    };
+    // If we are lucky, it will run again if the score is below average
+    if (lucky && score < 49) {
+      let random = Math.floor(Math.random() * answers.length);
+      let choosenAnswer = answers[random].value;
+      setAnswer(choosenAnswer);
+    }
+
+    // ################## Prediction ####################
 
     let questionPrediction = {
       value: question ? question : questions[0],
       totalScore: score,
+      prediction: answer,
       count: 1,
     };
 
@@ -102,21 +96,37 @@ export default function QuestionForm() {
           });
         }
 
+        let predictionResult = el.totalScore / el.count;
+
+        // Taken from https://stackoverflow.com/questions/8584902/get-the-closest-number-out-of-an-array
+        let finalPredictionResult = answers.sort((a, b) => {
+          return (
+            Math.abs(a.score - predictionResult) -
+            Math.abs(b.score - predictionResult)
+          );
+        })[0];
+
+        setFinalPrediction(finalPredictionResult.value);
+
         if (el.value === question) {
           // Runs twice, if answer is already in array
           // Had to modify score to divide by 2
           setPredictionData((prevState) => ({
             ...prevState,
             totalScore: (el.totalScore = el.totalScore + score / 2),
+            count: (el.count = el.count + 0.5),
+            prediction: (el.prediction = finalPrediction),
           }));
         }
       });
-    // ##################################################################
-    // ##################################################################
-    // ##################################################################
-    // ##################################################################
-    // ##################################################################
-    // ##################################################################
+
+    // ################## Frequency ####################
+
+    let intitalData = {
+      value: choosenAnswer,
+      score,
+      frequency: 1,
+    };
 
     // If nothing is in frequencyData
     if (!frequencyData.data.length) {
@@ -124,10 +134,21 @@ export default function QuestionForm() {
         data: [...frequencyData.data, intitalData],
       });
     }
-    console.log('counter', counter);
+
+    function ifIncludes2() {
+      let result = true;
+      frequencyData.data.map((el) => {
+        if (el.value === choosenAnswer) return (result = false);
+      });
+      return result;
+    }
+
     frequencyData.data &&
       frequencyData.data.map((el) => {
-        let result = ifIncludes(answer, frequencyData.data);
+        // If i reuse the function ifIncludes, it breaks my code and adds repetative data
+        let result = ifIncludes2();
+        // let result = ifIncludes(choosenAnswer, predictionData.data);
+
 
         // if new answer is not inside array, add it
         if (result) {
@@ -147,14 +168,18 @@ export default function QuestionForm() {
       });
   }
 
+  function luckyPicked() {
+    setLucky(true);
+    pickAnswer();
+  }
+
   return (
     <Box sx={{ minWidth: 120 }}>
-      <FormControl onSubmit={pickAnswer}>
+      <FormControl>
         <InputLabel variant="standard" htmlFor="uncontrolled-native">
           Stranger Things Magic 8 Ball Questions
         </InputLabel>
         <NativeSelect
-          defaultValue={questions[0]}
           inputProps={{
             name: "age",
             id: "uncontrolled-native",
@@ -165,22 +190,16 @@ export default function QuestionForm() {
         </NativeSelect>
         <div>
           <span>
-            <Button
-              className="button"
-              type="submit"
-              onClick={pickAnswer}
-              variant="outlined"
-            >
+            <Button className="button" onClick={pickAnswer} variant="outlined">
               Shake the Magic 8 ball!
             </Button>
           </span>{" "}
           <span>
-            <Button className="button" variant="outlined">
+            <Button className="button" variant="outlined" onClick={luckyPicked}>
               Luck is on my side!
             </Button>
           </span>
         </div>
-        {/* <div>Question that is picked: {data.activeAnswer}</div> */}
       </FormControl>
     </Box>
   );
