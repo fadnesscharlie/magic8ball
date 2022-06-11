@@ -1,84 +1,44 @@
-# Getting Started with Create React App
+# Magic 8 Ball
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Hello! Thank you for coming!
 
-## Available Scripts
+This application is a magic 8 ball based around Stranger Things.
 
-In the project directory, you can run:
+[The Project Outline](https://observablehq.com/@mike-mwk/stranger-things-magic-8-ball#answer)
 
-### `npm start`
+## To start
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+```
+Pull down this Repo to your local machine
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+Run: "npm install" to install all the packages and node modules
 
-### `npm test`
+```
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## Usage
 
-### `npm run build`
+Using this application is simple as pie!
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+We have a list of questions based on Stranger things, all you need to do is pick which one!
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+We have a Lucky button if you are feeling lucky in your decision!
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+## Results
 
-### `npm run eject`
+We have 2 tables for you to see your data!
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+### Frequency Table(Left Table)
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+This table shows the frequency of each result:
+- Answers
+- Frequency
+- The percentage of how often the show up(Make sure this 8 ball isnt cheating!)
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+### Prediction Table(Right Table)
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+This table shows the prediction of each question:
+- prediction based on each question
 
-## Learn More
+Contributers:
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
-
-
-
-
-
-
-
-
-
-
-
-
-
-https://stackoverflow.com/questions/8584902/get-the-closest-number-out-of-an-array
+- [Sort array to find result](https://stackoverflow.com/questions/8584902/get-the-closest-number-out-of-an-array)

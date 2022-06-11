@@ -201,6 +201,8 @@ export default function QuestionForm() {
           </span>
         </div>
       </FormControl>
+      <div className='answer'>The Magic 8 Ball says!!</div>
+      <div className='answer'>{'>>'} {answer}</div>
     </Box>
   );
 }
