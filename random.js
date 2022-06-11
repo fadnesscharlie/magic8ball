@@ -13,17 +13,10 @@ import { DataContext } from "../../context/questionData";
 import "./QuestionForm.css";
 
 export default function QuestionForm() {
-  let {
-    data,
-    setData,
-    counter,
-    setCounter,
-    predictionData,
-    setPredictionData,
-  } = useContext(DataContext);
+  let { data, setData, counter, setCounter, questionData, setQuestionData } =
+    useContext(DataContext);
 
-  let [question, setQuestion] = useState(questions[0]);
-  let [answer, setAnswer] = useState("");
+  let [question, setQuestion] = useState("");
 
   let answerForm = questions.map((ans, idx) => (
     <option value={ans} key={idx}>
@@ -35,12 +28,14 @@ export default function QuestionForm() {
     setQuestion(e.target.value);
   }
 
-  console.log("predictionData length: ", predictionData);
+  console.log("questionData", questionData.data);
 
   /* Checks:
   if question is already inside
   if answer is already inside that question
     Once you add score, and increment counter
+
+
 
   Data:
     Add all the points up per question
@@ -55,23 +50,13 @@ export default function QuestionForm() {
       Return score value that is 25
 */
 
-  // custom includes function
-  function ifIncludes(value, arr) {
-    let result = true;
-    arr.map((el) => {
-      if (el.value === value) return (result = false);
-    });
-    // console.log('Result', result);
-    return result;
-  }
-
   function pickAnswer() {
     let random = Math.floor(Math.random() * answers.length);
 
     let choosenAnswer = answers[random].value;
     let score = answers[random].score;
 
-    setAnswer(choosenAnswer);
+    setData({ ...data, activeAnswer: choosenAnswer });
     setCounter(counter + 1);
 
     let intitalData = {
@@ -81,56 +66,59 @@ export default function QuestionForm() {
     };
 
     let questionPrediction = {
-      value: question ? question : questions[0],
-      totalScore: score,
-      count: 1,
-    };
-
-    // If nothing is in frequencyData
-    if (!predictionData.data.length) {
-      setPredictionData({
-        data: [...predictionData.data, questionPrediction]});
+      question: question ? question : questions[0],
+      score: questionData.data[0].score + score,
+      count: questionData.data[0].count + 1,
     }
+    
 
-    predictionData.data &&
-      predictionData.data.map((el) => {
-        let result = ifIncludes(question, predictionData.data);
-        if (result) {
-          setPredictionData({ data: [...predictionData.data, questionPrediction]});
-        }
+    questionData.data && questionData.data.map((el) => {
+      let result = ifIncludes(el.question, question, questionData.data)
+      console.log('result',result)
 
-        if (el.value === question) {
-          // Runs twice, if answer is already in array
-          // Had to modify score to divide by 2
-            setPredictionData((prevState) => ({
-            ...prevState,
-            totalScore: el.totalScore = el.totalScore + (score/2),
-          }));
-        }
-      });
-    // ##################################################################
-    // ##################################################################
-    // ##################################################################
-    // ##################################################################
-    // ##################################################################
-    // ##################################################################
+      if(result) {
+        setQuestionData({
+          data: [
+            ...questionData.data,
+            questionPrediction,
+          ],
+        });
+      }
+    });
 
-    // If nothing is in frequencyData
-    if (!data.frequencyData.length) {
+    // If nothing is in predictions
+    if (!data.predictions.length) {
       setData({
-        frequencyData: [...data.frequencyData, intitalData],
+        predictions: [...data.predictions, intitalData],
       });
+      // setQuestionData({
+      //   data: [
+      //     {
+      //       question: data.activeQuestion,
+      //       score,
+      //       count: 1,
+      //     },
+      //   ],
+      // });
     }
 
-    data.frequencyData &&
-      data.frequencyData.map((el) => {
-        let result = ifIncludes(answer, data.frequencyData);
-        result = false;
+    // custom includes function
+    function ifIncludes(value1, value2, arr) {
+      let result = true;
+      arr.map((el) => {
+        if (value1 === value2) return (result = false);
+      });
+      return result;
+    }
+
+    data.predictions &&
+      data.predictions.map((el) => {
+        let result = ifIncludes(el.value, choosenAnswer, data.predictions);
 
         // if new answer is not inside array, add it
         if (result) {
           setData({
-            frequencyData: [...data.frequencyData, intitalData],
+            predictions: [...data.predictions, intitalData],
           });
         }
 

@@ -46,7 +46,7 @@ export default function ResultTable() {
           </TableRow>
         </TableHead>
         <TableBody>
-          {data.predictions.map((row) => (
+          {data.frequencyData.map((row) => (
             <StyledTableRow hover key={row.value}>
               <StyledTableCell component="th" scope="row">
                 {row.value}
