@@ -12,18 +12,6 @@ import { answers } from "../db/database";
 import { DataContext } from "../../context/questionData";
 import "./QuestionForm.css";
 
-// Prediction
-// import Prediction from './Prediction/Prediction.js';
-
-// custom includes function
-export function ifIncludes(value, arr) {
-  let result = true;
-  arr.map((el) => {
-    if (el.value === value) return (result = false);
-  });
-  return result;
-}
-
 export default function QuestionForm() {
   let {
     counter,
@@ -32,14 +20,13 @@ export default function QuestionForm() {
     setPredictionData,
     frequencyData,
     setFrequencyData,
-    score,
-    setScore,
   } = useContext(DataContext);
 
   let [question, setQuestion] = useState(questions[0]);
   let [answer, setAnswer] = useState("");
-  let [finalPrediction, setFinalPrediction] = useState("");
   let [lucky, setLucky] = useState(false);
+  const [score, setScore] = useState(0);
+
 
   let answerForm = questions.map((ans, idx) => (
     <option value={ans} key={idx}>
@@ -70,8 +57,6 @@ export default function QuestionForm() {
       setAnswer(choosenAnswer);
     }
 
-    // Prediction(random);
-
     // ################## Prediction ####################
     let questionPrediction = {
       value: question ? question : questions[0],
@@ -87,8 +72,17 @@ export default function QuestionForm() {
       });
     }
 
+    // custom includes function
+    function ifIncludes(value, arr) {
+      let result = true;
+      arr.forEach((el) => {
+        if (el.value === value) return (result = false);
+      });
+      return result;
+    }
+
     predictionData.data &&
-      predictionData.data.map((el) => {
+      predictionData.data.forEach((el) => {
         let result = ifIncludes(question, predictionData.data);
         if (result) {
           setPredictionData({
@@ -96,12 +90,12 @@ export default function QuestionForm() {
           });
         }
         let predictionResult = el.totalScore / el.count;
-    
+
         // Custom sort/filter map
         // Finds which values it is between
         // Compares both value and sets finalPrediction to closer value of predictionResult
         let finalPredictionResult;
-        answers.map((a, b) => {
+        answers.forEach((a, b) => {
           // Make sure map doesnt go over the array
           if (b === answers.length - 1) {
             return;
@@ -116,10 +110,11 @@ export default function QuestionForm() {
 
             let min = Math.min(first, second);
 
-            min === first ? finalPredictionResult = a : finalPredictionResult = bb
+            min === first
+              ? (finalPredictionResult = a)
+              : (finalPredictionResult = bb);
           }
         });
-        setFinalPrediction(finalPredictionResult);
 
         if (el.value === question) {
           // Runs twice, if answer is already in array
@@ -150,14 +145,14 @@ export default function QuestionForm() {
 
     function ifIncludes2() {
       let result = true;
-      frequencyData.data.map((el) => {
+      frequencyData.data.forEach((el) => {
         if (el.value === choosenAnswer) return (result = false);
       });
       return result;
     }
 
     frequencyData.data &&
-      frequencyData.data.map((el) => {
+      frequencyData.data.forEach((el) => {
         // If i reuse the function ifIncludes, it breaks my code and adds repetative data
         let result = ifIncludes2();
         // let result = ifIncludes(choosenAnswer, predictionData.data);
@@ -213,9 +208,10 @@ export default function QuestionForm() {
           </span>
         </div>
       </FormControl>
-      <div className="answer">The Magic 8 Ball says!!</div>
+      <div className="answer">{answer ? "The Magic 8 Ball says!!" : ""}</div>
       <div className="answer">
-        {">>"} {answer}
+        {answer ? ">>" : ""}
+        {answer ? answer : ""}
       </div>
     </Box>
   );

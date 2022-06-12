@@ -5,11 +5,18 @@ import { answers } from "../../db/database";
 
 import { DataContext } from "../../../context/questionData";
 
-import { ifIncludes } from "../QuestionForm";
+// import { ifIncludes } from "../QuestionForm";
 
+function ifIncludes(value, arr) {
+  let result = true;
+  arr.forEach((el) => {
+    if (el.value === value) return (result = false);
+  });
+  return result;
+}
 
 export default function Prediction(props) {
-  let [question, setQuestion] = useState(questions[0]);
+  let [question] = useState(questions[0]);
   let [finalPrediction, setFinalPrediction] = useState("");
 
   let { predictionData, setPredictionData, score } = useContext(DataContext);
@@ -29,7 +36,7 @@ if (!predictionData.data.length) {
 }
 
 predictionData.data &&
-  predictionData.data.map((el) => {
+  predictionData.data.forEach((el) => {
     let result = ifIncludes(question, predictionData.data);
     if (result) {
       setPredictionData({

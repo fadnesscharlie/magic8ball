@@ -1,4 +1,4 @@
-import {useContext} from "react";
+import { useContext } from "react";
 import { styled } from "@mui/material/styles";
 import {
   Table,
@@ -37,29 +37,35 @@ export default function PredictionTable() {
   let { predictionData } = useContext(DataContext);
 
   return (
-    <TableContainer component={Paper}>
-      <Table  aria-label="customized table" className="table">
-        <TableHead>
-          <TableRow>
-            <StyledTableCell>Magic 8 ball Questions!</StyledTableCell>
-            <StyledTableCell align="right">Prediction</StyledTableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {predictionData.data.map((row) => (
-            <StyledTableRow hover key={row.value}>
-              <StyledTableCell component="th" scope="row">
-                {row.value}
-              </StyledTableCell>
-              <StyledTableCell align="right">
-                
-                {row.prediction.value}{" "}{'('}{row.prediction.score}{'%)'}
-                
+    <>
+      {predictionData.data.length ? (
+        <TableContainer component={Paper}>
+          <Table aria-label="customized table" className="table">
+            <TableHead>
+              <TableRow>
+                <StyledTableCell>Magic 8 ball Questions!</StyledTableCell>
+                <StyledTableCell align="right">Prediction</StyledTableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {predictionData.data.map((row) => (
+              <StyledTableRow hover key={row.value}>
+                <StyledTableCell component="th" scope="row">
+                  {row.value}
                 </StyledTableCell>
-            </StyledTableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </TableContainer>
+                <StyledTableCell align="right">
+                  {row.prediction.value} {"("}
+                  {row.prediction.score}
+                  {"%)"}
+                </StyledTableCell>
+              </StyledTableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
+      ) : (
+        ""
+      )}
+    </>
   );
 }
