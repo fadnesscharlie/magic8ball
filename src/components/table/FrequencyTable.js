@@ -37,29 +37,37 @@ export default function FrequencyTable() {
   let { frequencyData, counter } = useContext(DataContext);
 
   return (
-    <TableContainer component={Paper}>
-      <Table aria-label="customized table" className="table">
-        <TableHead>
-          <TableRow>
-            <StyledTableCell>Magic 8 ball Answers!</StyledTableCell>
-            <StyledTableCell align="right">Frequency</StyledTableCell>
-            <StyledTableCell align="right">Percentage</StyledTableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {frequencyData.data.map((row) => (
-            <StyledTableRow hover key={row.value}>
-              <StyledTableCell component="th" scope="row">
-                {row.value}
-              </StyledTableCell>
-              <StyledTableCell align="right">{row.frequency}</StyledTableCell>
-              <StyledTableCell align="right">
-                % {((row.frequency / counter) * 100).toFixed(2)}
-              </StyledTableCell>
-            </StyledTableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </TableContainer>
+    <>
+      {frequencyData.data.length ? (
+        <TableContainer component={Paper}>
+          <Table aria-label="customized table" className="table">
+            <TableHead>
+              <TableRow>
+                <StyledTableCell>Magic 8 ball Answers!</StyledTableCell>
+                <StyledTableCell align="right">Frequency</StyledTableCell>
+                <StyledTableCell align="right">Percentage</StyledTableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {frequencyData.data.map((row) => (
+                <StyledTableRow hover key={row.value}>
+                  <StyledTableCell component="th" scope="row">
+                    {row.value}
+                  </StyledTableCell>
+                  <StyledTableCell align="right">
+                    {row.frequency}
+                  </StyledTableCell>
+                  <StyledTableCell align="right">
+                    % {((row.frequency / counter) * 100).toFixed(2)}
+                  </StyledTableCell>
+                </StyledTableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
+      ) : (
+        ""
+      )}
+    </>
   );
 }
