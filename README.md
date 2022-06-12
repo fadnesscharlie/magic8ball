@@ -39,6 +39,17 @@ This table shows the frequency of each result:
 This table shows the prediction of each question:
 - prediction based on each question
 
-Contributers:
+Resources:
 
 - [Sort array to find result](https://stackoverflow.com/questions/8584902/get-the-closest-number-out-of-an-array)
+<!-- 
+Todo:
+
+Make prediction pop up right away
+css to space things out
+better sort to get a better prediction
+  Feels like prediciton is not right.
+  When sorts run, the first prediction will pop up
+  but the second will make it disappear, then works fine after that
+
+-->

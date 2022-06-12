@@ -13,15 +13,14 @@ import { DataContext } from "../../context/questionData";
 import "./QuestionForm.css";
 
 // Prediction
-// import prediction from './Prediction/prediction';
+// import Prediction from './Prediction/Prediction.js';
 
 // custom includes function
-function ifIncludes(value, arr) {
+export function ifIncludes(value, arr) {
   let result = true;
   arr.map((el) => {
-    if (el.value === value) return  result = false;
+    if (el.value === value) return (result = false);
   });
-  // console.log('Result', result);
   return result;
 }
 
@@ -71,12 +70,13 @@ export default function QuestionForm() {
       setAnswer(choosenAnswer);
     }
 
-    // ################## Prediction ####################
+    // Prediction(random);
 
+    // ################## Prediction ####################
     let questionPrediction = {
       value: question ? question : questions[0],
-      totalScore: score,
-      prediction: answer,
+      totalScore: scoreData,
+      prediction: answers[random],
       count: 1,
     };
 
@@ -95,18 +95,31 @@ export default function QuestionForm() {
             data: [...predictionData.data, questionPrediction],
           });
         }
-
         let predictionResult = el.totalScore / el.count;
+    
+        // Custom sort/filter map
+        // Finds which values it is between
+        // Compares both value and sets finalPrediction to closer value of predictionResult
+        let finalPredictionResult;
+        answers.map((a, b) => {
+          // Make sure map doesnt go over the array
+          if (b === answers.length - 1) {
+            return;
+          }
+          // Grabs the next value in answers to compare
+          let bb = answers[b + 1];
 
-        // Taken from https://stackoverflow.com/questions/8584902/get-the-closest-number-out-of-an-array
-        let finalPredictionResult = answers.sort((a, b) => {
-          return (
-            Math.abs(a.score - predictionResult) -
-            Math.abs(b.score - predictionResult)
-          );
-        })[0];
+          if (a.score <= predictionResult && bb.score >= predictionResult) {
+            // Finds lowest distance from first and second values
+            let first = Math.abs(predictionResult - a.score);
+            let second = Math.abs(predictionResult - bb.score);
 
-        setFinalPrediction(finalPredictionResult.value);
+            let min = Math.min(first, second);
+
+            min === first ? finalPredictionResult = a : finalPredictionResult = bb
+          }
+        });
+        setFinalPrediction(finalPredictionResult);
 
         if (el.value === question) {
           // Runs twice, if answer is already in array
@@ -115,7 +128,7 @@ export default function QuestionForm() {
             ...prevState,
             totalScore: (el.totalScore = el.totalScore + score / 2),
             count: (el.count = el.count + 0.5),
-            prediction: (el.prediction = finalPrediction),
+            prediction: (el.prediction = finalPredictionResult),
           }));
         }
       });
@@ -148,7 +161,6 @@ export default function QuestionForm() {
         // If i reuse the function ifIncludes, it breaks my code and adds repetative data
         let result = ifIncludes2();
         // let result = ifIncludes(choosenAnswer, predictionData.data);
-
 
         // if new answer is not inside array, add it
         if (result) {
@@ -201,8 +213,10 @@ export default function QuestionForm() {
           </span>
         </div>
       </FormControl>
-      <div className='answer'>The Magic 8 Ball says!!</div>
-      <div className='answer'>{'>>'} {answer}</div>
+      <div className="answer">The Magic 8 Ball says!!</div>
+      <div className="answer">
+        {">>"} {answer}
+      </div>
     </Box>
   );
 }

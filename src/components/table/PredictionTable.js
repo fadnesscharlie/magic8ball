@@ -51,7 +51,11 @@ export default function PredictionTable() {
               <StyledTableCell component="th" scope="row">
                 {row.value}
               </StyledTableCell>
-              <StyledTableCell align="right">{row.prediction}</StyledTableCell>
+              <StyledTableCell align="right">
+                
+                {row.prediction.value}{" "}{'('}{row.prediction.score}{'%)'}
+                
+                </StyledTableCell>
             </StyledTableRow>
           ))}
         </TableBody>
